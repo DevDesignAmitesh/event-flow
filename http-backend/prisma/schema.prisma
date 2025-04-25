@@ -1,0 +1,85 @@
+generator client {
+  provider = "prisma-client-js"
+  output   = "./prisma/generated/client"
+}
+
+datasource db {
+  provider = "postgresql"
+  url      = env("DATABASE_URL")
+}
+
+model User {
+  id        String   @id @default(uuid())
+  email     String   @unique
+  password  String
+  role      Role
+  createdAt DateTime @default(now())
+
+  events        Event[]        @relation("OrganizerEvents")
+  registrations Registration[]
+  Feedback      Feedback[]
+  AuditLog      AuditLog[]
+}
+
+model Event {
+  id          String   @id @default(uuid())
+  title       String
+  description String?
+  date        DateTime
+  organizer   User     @relation("OrganizerEvents", fields: [organizerId], references: [id])
+  organizerId String
+  createdAt   DateTime @default(now())
+
+  registrations Registration[]
+  Feedback      Feedback[]
+
+  // Engagement fields (you can calculate and update these periodically)
+  registrationCount       Int        @default(0) // Number of registrations
+  confirmedAttendance     Int        @default(0) // Number of attendees that confirmed
+  organizerResponsiveness Int        @default(0) // Organizers' responsiveness (You might use a custom scale)
+  attendeeFeedback        Int        @default(0) // Feedback from attendees (Random or mock feedback)
+  AuditLog                AuditLog[]
+}
+
+model Registration {
+  id                  String   @id @default(uuid())
+  attendee            User     @relation(fields: [attendeeId], references: [id])
+  attendeeId          String
+  event               Event    @relation(fields: [eventId], references: [id])
+  eventId             String
+  createdAt           DateTime @default(now())
+  attendanceConfirmed Boolean  @default(false) // Track attendance confirmation
+
+  @@unique([attendeeId, eventId])
+}
+
+model Feedback {
+  id         String   @id @default(uuid())
+  attendee   User     @relation(fields: [attendeeId], references: [id])
+  attendeeId String
+  event      Event    @relation(fields: [eventId], references: [id])
+  eventId    String
+  feedback   Int // Feedback score
+  rating     Int // Rating  score
+  createdAt  DateTime @default(now())
+
+  @@unique([attendeeId, eventId])
+}
+
+model AuditLog {
+  id          String   @id @default(uuid())
+  action      String // Action performed (e.g., 'REGISTER_EVENT', 'DELETE_EVENT', etc.)
+  userId      String // ID of the user who performed the action
+  userRole    Role // Role of the user (e.g., 'attendee', 'organizer')
+  eventId     String? // ID of the event if the action is event-related (nullable)
+  timestamp   DateTime @default(now()) // Timestamp of when the action was performed
+  description String? // Optional description of the action, useful for additional details
+
+  user  User   @relation(fields: [userId], references: [id])
+  event Event? @relation(fields: [eventId], references: [id])
+}
+
+enum Role {
+  attendee
+  organizer
+}
