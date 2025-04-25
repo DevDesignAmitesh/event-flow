@@ -122,7 +122,8 @@ exports.Prisma.UserScalarFieldEnum = {
   email: 'email',
   password: 'password',
   role: 'role',
-  createdAt: 'createdAt'
+  createdAt: 'createdAt',
+  notificationsId: 'notificationsId'
 };
 
 exports.Prisma.EventScalarFieldEnum = {
@@ -165,6 +166,13 @@ exports.Prisma.AuditLogScalarFieldEnum = {
   description: 'description'
 };
 
+exports.Prisma.NotificationsScalarFieldEnum = {
+  id: 'id',
+  message: 'message',
+  createdAt: 'createdAt',
+  userId: 'userId'
+};
+
 exports.Prisma.SortOrder = {
   asc: 'asc',
   desc: 'desc'
@@ -189,7 +197,8 @@ exports.Prisma.ModelName = {
   Event: 'Event',
   Registration: 'Registration',
   Feedback: 'Feedback',
-  AuditLog: 'AuditLog'
+  AuditLog: 'AuditLog',
+  Notifications: 'Notifications'
 };
 
 /**

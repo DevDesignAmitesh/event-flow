@@ -17,8 +17,11 @@ model User {
 
   events        Event[]        @relation("OrganizerEvents")
   registrations Registration[]
-  Feedback      Feedback[]
-  AuditLog      AuditLog[]
+  feedback      Feedback[]
+  auditLog      AuditLog[]
+
+  notifications   Notifications[]
+  notificationsId String?
 }
 
 model Event {
@@ -77,6 +80,14 @@ model AuditLog {
 
   user  User   @relation(fields: [userId], references: [id])
   event Event? @relation(fields: [eventId], references: [id])
+}
+
+model Notifications {
+  id        String   @id @default(uuid())
+  message   String // Message content for the notification
+  createdAt DateTime @default(now())
+  User      User?    @relation(fields: [userId], references: [id])
+  userId    String?
 }
 
 enum Role {
