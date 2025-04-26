@@ -1,9 +1,8 @@
 import { Request, Response, Router } from "express";
-import { PrismaClient } from "../../prisma/prisma/generated/client";
 import { middleware } from "../../middleware";
+import { prisma } from "../../prisma/src";
 
 const userRouter = Router();
-const prisma = new PrismaClient();
 
 // Register for Event (Attendee)
 userRouter.post(
