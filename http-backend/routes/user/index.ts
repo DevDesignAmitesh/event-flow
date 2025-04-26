@@ -1,6 +1,7 @@
 import { Request, Response, Router } from "express";
 import { middleware } from "../../middleware";
 import { prisma } from "../../prisma/src";
+import { notifyEventSubscription } from "../../hooks";
 
 const userRouter = Router();
 
@@ -10,6 +11,7 @@ userRouter.post(
   middleware, // Ensure the user is authenticated and authorized as attendee
   async (req: Request, res: Response): Promise<any> => {
     const userId = (req as any).user.userId; // Attendee's user ID from middleware
+    const email = (req as any).user.email; // Attendee's user ID from middleware
     const eventId = req.params.eventId;
 
     try {
@@ -42,6 +44,8 @@ userRouter.post(
           eventId: eventId,
         },
       });
+
+      await notifyEventSubscription(email, event.id);
 
       await prisma.auditLog.create({
         data: {
@@ -115,25 +119,36 @@ userRouter.delete(
   }
 );
 
-// View Upcoming Events (Attendee)
 userRouter.get(
   "/upcoming",
   middleware, // Ensure the user is authenticated and authorized as attendee
   async (req: Request, res: Response): Promise<any> => {
     try {
-      // Get all upcoming events
+      const userId = (req as any).user.userId; // Logged-in user's ID from middleware
+
       const upcomingEvents = await prisma.event.findMany({
-        where: {
-          date: {
-            gte: new Date(), // Only future events
+        include: {
+          organizer: true,
+          registrations: {
+            include: {
+              attendee: true,
+            },
           },
-        },
-        orderBy: {
-          date: "asc", // Order by event date
         },
       });
 
-      return res.status(200).json(upcomingEvents);
+      const eventsWithRegistrationStatus = upcomingEvents.map((event) => {
+        const isRegistered = event.registrations.some(
+          (registration) => registration.attendeeId === userId
+        );
+
+        return {
+          ...event, // Keep all existing event data
+          isRegistered, // Add new field
+        };
+      });
+
+      return res.status(200).json(eventsWithRegistrationStatus);
     } catch (error) {
       console.error("Error fetching upcoming events:", error);
       return res.status(500).json({ message: "Internal server error" });

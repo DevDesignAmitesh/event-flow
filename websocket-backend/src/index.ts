@@ -30,7 +30,17 @@ wss.on("connection", async (ws: WebSocket, req: IncomingMessage) => {
 
   ws.on("message", async (data: any) => {
     try {
-      const parsedMessage = JSON.parse(data.toString());
+      const messageString = data.toString();
+
+      // Check if it looks like a JSON object or array
+      if (!messageString.startsWith("{") && !messageString.startsWith("[")) {
+        console.warn("Skipping non-JSON message:", messageString);
+        return;
+      }
+
+      const parsedMessage = JSON.parse(messageString);
+
+      console.log(parsedMessage)
 
       if (parsedMessage.type === "event-subscribe") {
         handleEventSubscription(parsedMessage);

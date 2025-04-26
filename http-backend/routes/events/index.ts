@@ -136,11 +136,6 @@ eventRouter.delete(
         });
       }
 
-      // Delete the event
-      await prisma.event.delete({
-        where: { id: eventId },
-      });
-
       await prisma.auditLog.create({
         data: {
           action: "DELETE_EVENT",
@@ -150,10 +145,49 @@ eventRouter.delete(
           description: `Event "${event.title}" deleted by organizer.`,
         },
       });
+      
+      // Delete the event
+      await prisma.event.delete({
+        where: { id: eventId },
+      });
 
       return res.status(200).json({ message: "Event deleted successfully" });
     } catch (error) {
       console.error("Error deleting event:", error);
+      return res.status(500).json({ message: "Internal server error" });
+    }
+  }
+);
+
+// Get all events created by organizer
+eventRouter.get(
+  "/my-events",
+  middleware,
+  async (req: Request, res: Response): Promise<any> => {
+    const role = (req as any).user.role;
+
+    if (role !== "organizer") {
+      return res.status(401).json({ message: "You are not organizer" });
+    }
+
+    console.log((req as any).user);
+
+    try {
+      const events = await prisma.event.findMany({
+        where: {
+          organizerId: (req as any).user.userId,
+        },
+        orderBy: {
+          date: "asc", // you can also remove this if you don't want sorted events
+        },
+        include: {
+          organizer: true,
+        },
+      });
+
+      return res.status(200).json(events);
+    } catch (error) {
+      console.error("Error fetching organizer's events:", error);
       return res.status(500).json({ message: "Internal server error" });
     }
   }

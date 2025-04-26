@@ -7,14 +7,17 @@ const authRouter = Router();
 const JWT_SECRET = process.env.JWT_SECRET!;
 const JWT_EXPIRES_IN = "7d";
 
-const generateToken = (userId: string, role: string) => {
-  return jwt.sign({ userId, role }, JWT_SECRET, { expiresIn: JWT_EXPIRES_IN });
+const generateToken = (userId: string, role: string, email: string) => {
+  return jwt.sign({ userId, role, email }, JWT_SECRET, {
+    expiresIn: JWT_EXPIRES_IN,
+  });
 };
 
 // ---------------------- Signup ----------------------
 authRouter.post(
   "/signup",
   async (req: Request, res: Response): Promise<any> => {
+    console.log(req.body);
     const { email, password, role } = req.body;
 
     if (!email || !password || !role) {
@@ -32,7 +35,7 @@ authRouter.post(
         data: { email, password: hashedPassword, role },
       });
 
-      const token = generateToken(user.id, user.role);
+      const token = generateToken(user.id, user.role, user.email);
       res.cookie("token", token, {
         httpOnly: true,
         secure: process.env.NODE_ENV === "production",
@@ -68,7 +71,7 @@ authRouter.post(
       if (!isMatch)
         return res.status(401).json({ message: "Invalid credentials" });
 
-      const token = generateToken(user.id, user.role);
+      const token = generateToken(user.id, user.role, user.email);
       res.cookie("token", token, {
         httpOnly: true,
         secure: process.env.NODE_ENV === "production",
@@ -107,7 +110,7 @@ authRouter.get("/isAuth", (req: Request, res: Response): any => {
     return res.status(200).json({
       isAuthenticated: true,
       message: "authenticated",
-      username: (decoded as any).username,
+      data: decoded,
     });
   } catch (error) {
     return res
