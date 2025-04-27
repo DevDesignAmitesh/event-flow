@@ -2,7 +2,7 @@ import { useEffect, useRef } from "react";
 
 export const checkAuth = async () => {
   try {
-    const res = await fetch("http://localhost:3000/api/v1/auth/isAuth", {
+    const res = await fetch("https://event-flow-1.onrender.com/api/v1/auth/isAuth", {
       method: "GET",
       credentials: "include",
     });
@@ -24,7 +24,7 @@ export const checkAuth = async () => {
 
 export const signup = async (email: string, password: string, role: string) => {
   try {
-    const res = await fetch("http://localhost:3000/api/v1/auth/signup", {
+    const res = await fetch("https://event-flow-1.onrender.com/api/v1/auth/signup", {
       method: "POST",
       credentials: "include",
       headers: {
@@ -48,7 +48,7 @@ export const signup = async (email: string, password: string, role: string) => {
 
 export const signin = async (email: string, password: string) => {
   try {
-    const res = await fetch("http://localhost:3000/api/v1/auth/signin", {
+    const res = await fetch("https://event-flow-1.onrender.com/api/v1/auth/signin", {
       method: "POST",
       credentials: "include",
       headers: {
@@ -72,7 +72,7 @@ export const signin = async (email: string, password: string) => {
 
 export const signout = async () => {
   try {
-    const res = await fetch("http://localhost:3000/api/v1/auth/signout", {
+    const res = await fetch("https://event-flow-1.onrender.com/api/v1/auth/signout", {
       method: "POST",
       credentials: "include",
       headers: {
@@ -97,7 +97,7 @@ export const signout = async () => {
 export const registerForEvent = async (eventId: string) => {
   try {
     const res = await fetch(
-      `http://localhost:3000/api/v1/user/register/${eventId}`,
+      `https://event-flow-1.onrender.com/api/v1/user/register/${eventId}`,
       {
         method: "POST",
         credentials: "include",
@@ -121,7 +121,7 @@ export const registerForEvent = async (eventId: string) => {
 export const unregisterFromEvent = async (eventId: string) => {
   try {
     const res = await fetch(
-      `http://localhost:3000/api/v1/user/unregister/${eventId}`,
+      `https://event-flow-1.onrender.com/api/v1/user/unregister/${eventId}`,
       {
         method: "DELETE",
         credentials: "include",
@@ -144,7 +144,7 @@ export const unregisterFromEvent = async (eventId: string) => {
 // View Upcoming Events
 export const getUpcomingEvents = async () => {
   try {
-    const res = await fetch(`http://localhost:3000/api/v1/user/upcoming`, {
+    const res = await fetch(`https://event-flow-1.onrender.com/api/v1/user/upcoming`, {
       method: "GET",
       credentials: "include",
     });
@@ -168,7 +168,7 @@ export const createEvent = async (
   date: string
 ) => {
   try {
-    const res = await fetch("http://localhost:3000/api/v1/event/create", {
+    const res = await fetch("https://event-flow-1.onrender.com/api/v1/event/create", {
       method: "POST",
       credentials: "include",
       headers: {
@@ -197,7 +197,7 @@ export const editEvent = async (
   date: string
 ) => {
   try {
-    const res = await fetch(`http://localhost:3000/api/v1/event/edit/${id}`, {
+    const res = await fetch(`https://event-flow-1.onrender.com/api/v1/event/edit/${id}`, {
       method: "PUT",
       credentials: "include",
       headers: {
@@ -221,7 +221,7 @@ export const editEvent = async (
 
 export const deleteEvent = async (id: string) => {
   try {
-    const res = await fetch(`http://localhost:3000/api/v1/event/delete/${id}`, {
+    const res = await fetch(`https://event-flow-1.onrender.com/api/v1/event/delete/${id}`, {
       method: "DELETE",
       credentials: "include",
     });
@@ -241,7 +241,7 @@ export const deleteEvent = async (id: string) => {
 
 export const getOrganizerEvents = async () => {
   try {
-    const res = await fetch("http://localhost:3000/api/v1/event/my-events", {
+    const res = await fetch("https://event-flow-1.onrender.com/api/v1/event/my-events", {
       method: "GET",
       credentials: "include", // Ensures cookies are sent
       headers: {
@@ -266,7 +266,7 @@ export const getOrganizerEvents = async () => {
 
 export const getAuditLogs = async () => {
   try {
-    const res = await fetch("http://localhost:3000/api/v1/audit", {
+    const res = await fetch("https://event-flow-1.onrender.com/api/v1/audit", {
       method: "GET",
       credentials: "include", // important for cookies/session
       headers: {
@@ -289,7 +289,7 @@ export const getAuditLogs = async () => {
 
 export const getNotifications = async () => {
   try {
-    const res = await fetch("http://localhost:3000/api/v1/notifications", {
+    const res = await fetch("https://event-flow-1.onrender.com/api/v1/notifications", {
       method: "GET",
       credentials: "include",
     });

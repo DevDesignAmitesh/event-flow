@@ -14,7 +14,7 @@ const ProtectedRoute = ({ children }: ProtectedRouteProps) => {
   useEffect(() => {
     const checkAuth = async () => {
       try {
-        const res = await fetch(`http://localhost:3000/api/v1/auth/isAuth`, {
+        const res = await fetch(`https://event-flow-1.onrender.com/api/v1/auth/isAuth`, {
           method: "GET",
           credentials: "include",
         });
