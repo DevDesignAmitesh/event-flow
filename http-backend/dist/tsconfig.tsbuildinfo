@@ -1,1 +1,0 @@
-{"root":["../hooks/index.ts","../middleware/index.ts","../prisma/src/index.ts","../routes/audit/index.ts","../routes/auth/index.ts","../routes/events/index.ts","../routes/notify/index.ts","../routes/user/index.ts","../src/index.ts"],"version":"5.6.2"}
