@@ -15,7 +15,7 @@ const eventSubscribers = new Map<string, Set<string>>(); // Store event subscrip
 start();
 
 wss.on("connection", async (ws: WebSocket, req: IncomingMessage) => {
-  const baseUrl = "http://localhost:5173";
+  const baseUrl = "https://event-flow-sandy.vercel.app";
   const email = new URL(req.url ?? "", baseUrl).searchParams.get("email");
 
   if (!email) {
