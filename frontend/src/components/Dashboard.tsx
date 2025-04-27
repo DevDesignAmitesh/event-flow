@@ -44,8 +44,6 @@ const Dashboard = () => {
     );
   }
 
-  console.log(eventCards);
-
   return (
     <>
       <LayoutWrapper>
