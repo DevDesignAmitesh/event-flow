@@ -4,7 +4,7 @@ export async function notifyEventSubscription(
   userEmail: string,
   eventId: string
 ) {
-  const socket = new WebSocket(`ws://localhost:8080?email=${userEmail}`);
+  const socket = new WebSocket(`https://event-flow-4vsr.onrender.com?email=${userEmail}`);
 
   socket.onopen = () => {
     const message = {

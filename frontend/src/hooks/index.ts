@@ -313,7 +313,7 @@ export default function useNotifications(email: string) {
   useEffect(() => {
     if (!email) return;
 
-    const socket = new WebSocket(`ws://localhost:8080?email=${email}`);
+    const socket = new WebSocket(`https://event-flow-4vsr.onrender.com?email=${email}`);
     socketRef.current = socket;
 
     socket.onmessage = (event) => {
